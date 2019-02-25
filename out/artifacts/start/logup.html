@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>用户注册</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/css/v_cloak.css"
+    />
+    <script src="static/node_modules/vue/dist/vue.js"></script>
+    <script src="static/js/logup.js"></script>
+  </head>
+  <body>
+    <div id="logup" style="margin-top:40px">
+      <form
+        ref="subfrom"
+        action="loguped"
+        method="POST"
+        class="login m-auto col-sm-auto m-auto w-25 shadow p-4 border-success rounded"
+      >
+        <h3 class="py-2 text-center ">用户注册</h3>
+
+        <div class="form-group">
+          <label for="inputName">真实姓名</label>
+          <input
+            @focus="focused($refs.na , $event)"
+            v-model="name"
+            class="form-control"
+            name="name"
+            id="inputName"
+            type="text"
+            placeholder="姓名"
+          />
+          <small v-cloak ref="na" class="form-text">{{ nameTag }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="inputUsername">用户名</label>
+          <input
+            @focus="focused($refs.user , $event)"
+            v-model="username"
+            class="form-control"
+            name="username"
+            id="inputUsername"
+            type="text"
+            placeholder="用户名"
+          />
+          <small v-cloak ref="user" class="form-text">{{ userTag }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword">密码</label>
+          <input
+            @focus="focused($refs.pass , $event)"
+            v-model="password"
+            class="form-control"
+            name="password"
+            id="inputPassword"
+            type="password"
+            placeholder="密码"
+          />
+          <small v-cloak ref="pass" class="form-text">{{ passTag }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="againPassword">重复密码</label>
+          <input
+            @focus="focused($refs.againPass , $event)"
+            v-model="againPassword"
+            class="form-control"
+            id="againPassword"
+            type="password"
+            placeholder="再次重复密码"
+          />
+          <small v-cloak ref="againPass" class="form-text">{{
+            againPassTag
+          }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="option">选择用户类型</label>
+          <select name="userType" id="option" class="form-control">
+            <optgroup label="选择一个账户类型">
+              <option value="plain">普通用户</option>
+              <option value="admin">管理员</option>
+              <option value="extraneous">临时账户</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <button
+          @click.prevent="check($refs.subfrom , $refs.na , $refs.user , $refs.pass , $refs.againPass)"
+          class="btn btn-primary"
+        >
+          提交
+        </button>
+        <button @click.prevent="jump" class="mx-2 btn btn-outline-primary">
+          登录
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

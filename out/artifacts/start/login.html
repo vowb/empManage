@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>用户登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/css/v_cloak.css"
+    />
+    <script src="static/node_modules/vue/dist/vue.js"></script>
+    <script src="static/js/login.js"></script>
+  </head>
+  <body>
+    <div id="login" style="margin-top:170px">
+      <form
+        ref="subfrom"
+        action="logined"
+        method="POST"
+        class="login m-auto col-sm-auto w-25 shadow p-4 border-success rounded"
+      >
+        <h3 class="py-3 text-center ">用户登录</h3>
+        <div class="form-group">
+          <label for="inputUsername">用户名</label>
+          <input
+            @focus="focused($refs.user , $event)"
+            v-model="username"
+            class="form-control"
+            name="username"
+            id="inputUsername"
+            type="text"
+            placeholder="用户名"
+          />
+          <small v-cloak ref="user" class="form-text mx-1">{{ userTag }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword">密码</label>
+          <input
+            @focus="focused($refs.pass , $event)"
+            v-model="password"
+            class="form-control"
+            name="password"
+            id="inputPassword"
+            type="password"
+            placeholder="密码"
+          />
+          <small v-cloak ref="pass" class="form-text mx-1">{{ passTag }}</small>
+        </div>
+
+        <button
+          @click.prevent="check($refs.subfrom , $refs.user , $refs.pass)"
+          type="submit"
+          class="btn btn-primary"
+        >
+          登录
+        </button>
+        <button @click.prevent="jump" class="mx-2 btn btn-outline-primary">
+          注册
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

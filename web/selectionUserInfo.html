@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>用户信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/css/v_cloak.css"
+    />
+    <script src="static/node_modules/vue/dist/vue.js"></script>
+    <script src="static/node_modules//whatwg-fetch/fetch.js"></script>
+    <script src="static/js/userInfo.js"></script>
+  </head>
+
+  <body>
+    <div id="all" class="container-fluid px-0">
+      <div class="bg-info p-2 shadow">
+        <div class="container p-0">
+          <h3 class="text-white ml-3 ">用户信息</h3>
+        </div>
+      </div>
+      <div class="container bg-light">
+        <div v-cloak class="row">
+          <div class="col-sm-12 row no-gutters mt-3">
+            <div class="col-sm-2">
+              <span>
+                <img
+                  width="150"
+                  height="150"
+                  class="shadow rounded initialism"
+                  v-bind:src="headPath"
+                />
+              </span>
+            </div>
+            <div class="col-sm-7">
+              <ul class="list-unstyled row font-weight-light h6 ml-2 mt-4">
+                <li class="col-sm-6 mt-3">
+                  <span>姓名：</span>
+                  <span>{{ user.name }}</span>
+                </li>
+                <li class="col-sm-6 mt-3">
+                  <span>账号：</span> <span>{{ user.username }}</span>
+                </li>
+                <li class="col-sm-6 mt-3">
+                  <span>用户类型：</span>
+                  <span v-if="!isDisplay">{{ user.power }}</span>
+                  <input
+                    v-if="isDisplay"
+                    v-model="user.power"
+                    @keyup="regexInput($event,$refs.changeBtns)"
+                    class="form-control form-control-sm d-inline-block col-3 small"
+                  />
+                </li>
+                <li class="col-sm-6 mt-3">
+                  <span>用户组：</span>
+                  <span v-if="!isDisplay">{{ user.userGroup }}</span>
+                  <input
+                    v-if="isDisplay"
+                    v-model="user.userGroup"
+                    @keyup="regexInput($event,$refs.changeBtns)"
+                    class="form-control form-control-sm d-inline-block col-3 small"
+                  />
+                </li>
+                <li class="col-sm-6 mt-3">
+                  <span>所属部门：</span>
+                  <span v-if="!isDisplay">{{ user.inDepartment }}</span>
+                  <input
+                    v-if="isDisplay"
+                    v-model="user.inDepartment"
+                    @keyup="regexInput($event,$refs.changeBtns)"
+                    class="form-control form-control-sm d-inline-block col-3"
+                  />
+                </li>
+                <li class="col-sm-6 mt-3">
+                  <span>注册于：</span>
+                  <span>{{ new Date(user.initTime).toLocaleString() }}</span>
+                </li>
+              </ul>
+            </div>
+            <div
+              class="col-sm-3 row align-items-start justify-content-end pt-4 "
+            >
+              <button
+                ref="changeBtns"
+                class="btn btn-outline-primary"
+                @click="changeflag && changeAttrs()"
+              >
+                {{ btnEdit }}
+              </button>
+              <button
+                ref="addBtns"
+                class="btn btn-outline-primary ml-2"
+                @click="addflag && addAttributes()"
+              >
+                {{ btnAdd }}
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-12 mt-3 list-group-item">
+            <ul class="list-unstyled">
+              <h3 class="mb-4 font-weight-light">人员详细信息</h3>
+              <div class="row" id="allInput">
+                <li
+                  class="col-sm-4 bg-light my-1 py-3 shadow-sm font-weight-light"
+                  v-for="i in infoListKeys.length"
+                  v-bind:key="i-1"
+                >
+                  <div class="">
+                    <span v-if="!isDisplay">{{ infoListKeys[i - 1] }}:</span>
+                    <span v-if="!isDisplay" class="form-control-sm">{{
+                      infoListValues[i - 1]
+                    }}</span>
+                    <input
+                      v-if="isDisplay"
+                      v-model="activeObj.key = infoListKeys[i-1]"
+                      @keyup="regexInput($event,$refs.changeBtns)"
+                      class="form-control form-control-sm d-inline-block col-3"
+                    />
+                    <input
+                      v-if="isDisplay"
+                      v-model="activeObj.value = infoListValues[i-1]"
+                      @keyup="regexInput($event,$refs.changeBtns)"
+                      class=" form-control form-control-sm d-inline-block ml-1 col-5"
+                    />
+                    <button
+                      v-if="isDisplay"
+                      class="btn btn-sm btn-outline-primary mb-1 col-2"
+                      @click="deleteAttr(i-1)"
+                    >
+                      删除
+                    </button>
+                  </div>
+                </li>
+                <li
+                  v-if="isAddAttr"
+                  class="col-sm-4 bg-light my-1 py-3 shadow-sm font-weight-light"
+                >
+                  <input
+                    ref="addKey"
+                    class="form-control form-control-sm d-inline-block col-3"
+                    v-model="activeObj.key"
+                    @keyup="regexInput($event,$refs.addBtn)"
+                    placeholder="描述名"
+                  />
+                  <input
+                    ref="addValue"
+                    class="form-control form-control-sm d-inline-block ml-1 col-5 "
+                    v-model="activeObj.value"
+                    @keyup="regexInput($event,$refs.addBtn)"
+                    placeholder="描述"
+                  />
+                  <button
+                    ref="addBtn"
+                    class="btn btn-sm btn-primary mb-1 col-2"
+                    @click="addattrflag && addAttribute()"
+                  >
+                    添加
+                  </button>
+                </li>
+                <h2
+                  class="font-weight-light text-center col-12 font-italic "
+                  v-if="(infoListKeys.length = infoListValues.length) == 0 && !isAddAttr"
+                >
+                  你可以添加描述
+                </h2>
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 上传文件 -->
+      <!--
+        <div class="m-auto h-25">
+            <form active="" methods="POST">
+                <div class="form-group">
+                    <input class="form-control-file" type="file" >
+                </div>
+            </form>
+        </div>
+      -->
+      <!--
+        <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false"
+      -->
+      <!--
+        :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+      -->
+      <!-- <img v-if="imageUrl" :src="imageUrl" class="avatar"> -->
+      <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+      <!-- </el-upload> -->
+    </div>
+  </body>
+</html>

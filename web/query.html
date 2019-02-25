@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>查询数据</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="static/css/v_cloak.css"
+    />
+    <script src="static/node_modules/vue/dist/vue.js"></script>
+    <script src="static/node_modules//whatwg-fetch/fetch.js"></script>
+    <script src="static/js/query.js"></script>
+  </head>
+  <body>
+    <div id="all" class="container">
+      <h3 class="mb-4 mt-3 text-center">人员信息管理</h3>
+      <div>
+        <table class="table-striped table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>姓名</th>
+              <th>账号</th>
+              <th>所属部门</th>
+              <th>最后修改时间</th>
+              <th>删除人员</th>
+            </tr>
+          </thead>
+
+          <body>
+            <tr
+              style="cursor:pointer"
+              v-cloak
+              @click.stop="toPost(user.id,'getInfo')"
+              v-for="(user,index) in users"
+              v-bind:key="index"
+            >
+              <th>{{ user.id }}</th>
+              <th>{{ user.name }}</th>
+              <th>{{ user.username }}</th>
+              <th>{{ user.inDepartment }}</th>
+              <th>{{ user.ctime | formatTime }}</th>
+              <th>
+                <button
+                  class="btn btn-sm btn-link"
+                  @click.stop="toPost(index,'del')"
+                >
+                  删除
+                </button>
+              </th>
+            </tr>
+          </body>
+        </table>
+      </div>
+      <div class="font-weight-light font-italic small text-center" style="padding-bottom: 10px; cursor: pointer" @click="changeNumber && addNumber()">{{ loadMoreStr }}</div>
+    </div>
+  </body>
+</html>

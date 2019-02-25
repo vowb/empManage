@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<excludedRequests-config>
+    <excludedRequests>
+        <request>/logup.html</request>
+        <request>/login.html</request>
+        <request>/</request>
+    </excludedRequests>
+</excludedRequests-config>

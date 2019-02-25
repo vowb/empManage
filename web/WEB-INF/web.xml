@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee                       http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+	<!--<context-param>-->
+		<!--<param-name>javax.faces.CONFIG_FILES</param-name>-->
+		<!--<param-value>/resource/loginFilterAwayWithRequests.xml</param-value>-->
+	<!--</context-param>-->
+
+	<!-- 欢迎页面 -->
+	<welcome-file-list>
+		<welcome-file>login.html</welcome-file>
+	</welcome-file-list>
+
+	<!-- 错误页面 -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/errorPage/404.html</location>
+	</error-page>
+	
+	<!-- tomcat启动时运行类 -->
+	<listener>
+		<listener-class>com.studentsManager.Listener.InitListener</listener-class>
+	</listener>
+
+	<!-- 自动分配和回收数据库连接类 -->
+	<listener>
+		<listener-class>com.studentsManager.Listener.AllotDbListener</listener-class>
+	</listener>
+
+	<!-- tomcat启动时运行类 -->
+	<listener>
+		<listener-class>com.studentsManager.Listener.ExcludedRequestListener</listener-class>
+	</listener>
+
+	<!-- 注册登录时servlet -->
+	<servlet>
+		<servlet-name>loginServlet</servlet-name>
+		<servlet-class>com.studentsManager.servlets.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>loginServlet</servlet-name>
+		<url-pattern>/logined</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 注册注册时servlet -->
+	<servlet>
+		<servlet-name>logupServlet</servlet-name>
+		<servlet-class>com.studentsManager.servlets.LogupServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>logupServlet</servlet-name>
+		<url-pattern>/loguped</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 注册查询时servlet -->
+	<servlet>
+		<servlet-name>queryDataServlet</servlet-name>
+		<servlet-class>com.studentsManager.servlets.QueryDataServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>queryDataServlet</servlet-name>
+		<url-pattern>/query</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>userInfoServlet</servlet-name>
+		<servlet-class>com.studentsManager.servlets.UserInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>userInfoServlet</servlet-name>
+		<url-pattern>/userinfo</url-pattern>
+	</servlet-mapping>
+
+    <servlet>
+        <servlet-name>selectionUserInfo</servlet-name>
+        <servlet-class>com.studentsManager.servlets.SelectionUserInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>selectionUserInfo</servlet-name>
+        <url-pattern>/selectionUserInfo</url-pattern>
+    </servlet-mapping>
+	
+	<!-- 编辑userinfo时servlet -->
+	<servlet>
+		<servlet-name>changeUserInfo</servlet-name>
+		<servlet-class>com.studentsManager.servlets.ChangeUserInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>changeUserInfo</servlet-name>
+		<url-pattern>/changeUserInfo</url-pattern>
+	</servlet-mapping>
+
+	<!-- 分页获取servlet -->
+	<servlet>
+		<servlet-name>pageingQuery</servlet-name>
+		<servlet-class>com.studentsManager.servlets.PagingQueryUserInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>pageingQuery</servlet-name>
+		<url-pattern>/pageingQuery</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>exitLogin</servlet-name>
+		<servlet-class>com.studentsManager.servlets.ExitLoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>exitLogin</servlet-name>
+		<url-pattern>/exitLogin</url-pattern>
+	</servlet-mapping>
+
+	<!-- 注册Filter -->
+	<!--  <filter>
+		<filter-name>IsLoginFilter</filter-name>
+		<filter-class>com.studentsManager.filters.IsLoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>IsLoginFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+
+	<!-- 注册Filter -->
+	<filter>
+		<filter-name>generalityFilter</filter-name>
+		<filter-class>com.studentsManager.filters.GeneralityFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>generalityFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+
+	<!-- 核查cookie -->
+	<filter>
+		<filter-name>checkCookie</filter-name>
+		<filter-class>com.studentsManager.filters.CheckCookieFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>checkCookie</filter-name>
+		<url-pattern>/login.html</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+
+    <filter>
+        <filter-name>judgePower</filter-name>
+        <filter-class>com.studentsManager.filters.JudgePowerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>judgePower</filter-name>
+        <url-pattern>/gotoQuery</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+
+
+	<!-- 验证是否登录过滤器 -->
+	<filter>
+		<filter-name>isLoginFilter</filter-name>
+		<filter-class>com.studentsManager.filters.IsLoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>isLoginFilter</filter-name>
+		<url-pattern>*.html</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+</web-app>
